@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru"> <!-- основной язык документа -->
+<head>
+    <meta charset="utf-8"> <!-- кодировка страницы -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- адаптирование формата под устройства; scale чтоб страница открывалась без зума -->
+    <title>Веб 1</title> <!-- заголовок вкладки браузера (отображается на вкладке и в истории) -->
+    <style> /* по лабе цсс стили лежат внутри документа html*/
+        /* css */
+        body { /* базовые цвета и настройки - наследуются всеми потомками */
+            margin: 0; /* (оступ снаружи) чтоб шапка прилипала к верху */
+            font-family: "Segoe UI", Arial, sans-serif; /* шрифт */
+            background: #fff; /* цвет фона страницы */
+            color: #1f1f1f; /* цвет текста на странице */
+        }
+
+        .page-wrapper { /* рамка для контента на странице чтоб задать ширину и границы */
+            max-width: 960px; /* ширина контента (не факт, что будет на весь экран) */
+            margin: 0 auto; /* (автоматические отступы) (по верт - 0; по горизнот - авто) по центру */
+            padding: 0 16px 32px; /* отступы элемента от своих же границ внутрь */
+        }
+
+        header.page-header { /* шапка с фио, группой и вариантом*/
+            text-align: center; /* центрирование заголовков */
+            padding: 24px 0 16px; /* внутренние отступы сверху и снизу */
+            font-family: cursive; /* по заданию шрифт курсив */
+            font-size: 22px; /* явно задаем размер шрифта */
+            color: #2c3e50; /* цвет текста в шапке */
+        }
+
+        header.page-header h1,
+        header.page-header h3 { /* сброс внешних отступов у заголовков в шапке (чтоб стояли плотно друг за другом)*/
+            margin: 6px 0;
+        }
+
+        header.page-header::after { /* (::) псевдоэлемент - синяя линия под шапкой по заданию [отдельный элемент, но привязанный к другому эл-ту (header)]*/
+            content: ""; /*обязательная конструкция для появления псевдоэлемента (без этого не рендерится) */
+            display: block; /*блочный чтоб задать ширину и высоту*/
+            width: 60%; /*псевдоэл занимает 60% ширины заголовка*/
+            height: 2px; /*толщина псевдоэл-та*/
+            margin: 16px auto 0; /*отступ: сверху 16px, по бокам авто, снизу 0*/
+            background: linear-gradient(90deg, transparent 0, #2c7aff 35%, #2c7aff 65%, transparent 100%);
+            /* горизонтальный градиент у фона:
+            0-35% прозрачный (только начинается цвет; плавный заход)
+            35-65% сплощной цвет (в центре)
+            65-100% снова прозрачность (плавный выход)
+
+            90 град - направление (слева направо)
+            */
+        }
+
+        main { /* основной контент под шапкой */
+            display: flex; /* флекс контейнер  ... gap удобный*/
+            flex-direction: column; /* расположение элементов друг под другом */
+            gap: 24px; /* вертикальные промежутки между блоками */
+        }
+
+        .top-row { /* верхний ряд: слева форма, справа канвас */
+            display: flex; /* (флекс контейнер - поставить парамы и график в одну строку и переносить на новую если экран узкий) горизонтально в строку */
+            flex-wrap: wrap; /* перенос, если не хватает ширины */
+            gap: 32px; /* промежуток между формой и канвасом */
+            align-items: flex-start; /* выравнивание по верхнему краю */
+            justify-content: space-between; /* раздвигаем по ширине ряда */
+            width: 100%; /*ряд занимает всю ширину контейнера */
+        }
+
+        form { /* колонка полей формы (слева) */
+            display: flex; /* вертикальная колонка */
+            flex-direction: column;
+            gap: 16px; /* разрывы между секциями формы */
+            width: 260px; /* фиксированная ширина формы */
+            flex: 0 0 260px; /* чтобы не растягивалось, а держалось 260px */
+        }
+
+        fieldset { /* обводки для парамов X R */
+            border: 1px solid #dcdcdc; /* тонкая рамка */
+            border-radius: 6px; /* скруглённость углов */
+            padding: 10px 12px; /* внутренний отступ в пикселях */
+        }
+
+        fieldset legend { /* заголовок полей с парамами */
+            font-weight: 600; /* полужирный */
+            font-size: 15px; /* немного крупнее обычного текста */
+        }
+
+        fieldset label { /* строка чекбокс + подпись */
+            display: flex; /* в линию с чекбоксом */
+            align-items: center; /* выравнивание по центральной линии */
+            gap: 6px; /* промежуток между чекбоксом и текстом */
+            margin: 4px 0; /* вертикальный отступ между строками */
+            font-size: 14px; /* размер текста возможных парамов */
+        }
+
+        form label[for="y"] { /* селектор атрибута: метка для поля Y */
+            font-weight: 600; /* выделение подписи "введите Y" */
+        }
+
+        #y { /* поле ввода Y; отступы в пикселях*/
+            padding: 6px 10px; /*внутренние отступы */
+            font-size: 15px; /*размер шрифта*/
+            border: 1px solid #dcdcdc; /*настройка границ, чтобы выглядело как поле ввода красивое*/
+            border-radius: 6px; /* скругление углов */
+        }
+
+        button { /*кнопка отправки формы с парамами */
+            font-size: 16px; /* чтобы текст был крпунее обычного */
+            padding: 8px 16px; /* отступы в пикселях */
+            border-radius: 6px; /* скругление углов*/
+            border: 1px solid #2c7aff; /* цвет рамки чтоб подходил под фон */
+            background: #2c7aff; /* синий фон */
+            color: #fff; /* белый текст */
+            cursor: pointer; /* курсор меняется при наведении */
+        }
+
+        button:hover { /* псевдокласс: визуальная обратная связь при наведении */
+            background: #1f6ae0; /* немного темнее при hover (=наведении)*/
+        }
+
+        .canvas-wrapper { /* обёртка вокруг графика */
+            border: 1px solid #dcdcdc; /* рамка */
+            border-radius: 6px; /* скругление */
+            padding: 12px; /* внутренний отступ вокруг холста */
+            background: #fff; /* белый фон под холст */
+            flex: 1 1 320px; /* растяжение максимум до 320px */
+            max-width: 520px; /* не шире 520px (под размер холста) */
+            aspect-ratio: 1 / 1; /* держим форму квадрата */
+            display: flex; /* центрирование содержимого */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #canvas { /* сам холст растягиваем до размеров обёртки (в % от размера свободного пр-ва)*/
+            width: 100%;
+            height: 100%;
+        }
+
+        section { /* секция истории точек */
+            margin-top: 8px; /*отступ сверху */
+            width: 100%; /* на всю ширину контейнера */
+        }
+
+        #results { /*таблица истории попаданий */
+            width: 100%; /*растяжение таблицы на всю ширину секции */
+            border-collapse: collapse; /* схлопываем границы ячеек (чтоб не наезжали друг на друга)*/
+            font-size: 14px; /* размер шрифта в таблице*/
+        }
+
+        #results th,
+        #results td { /*ячейки таблицы: границы отступы и выравнивание */
+            border: 1px solid #d0d0d0;
+            padding: 6px 10px;
+            text-align: center;
+        }
+
+        #results thead { /*фон для шапки таблицы*/
+            background: #f5f6f8;
+        }
+
+        #results tbody tr:nth-child(even) { /*псевдокласс: чтоб четные строки таблицы резов отличались*/
+            background: #fafafa;
+        }
+    </style>
+
+    <!-- подключаем js (файл main.js выполняется когда страница загрузилась)-->
+    <script type="module" src="main.js"></script>
+</head>
+
+
+<!-- html -->
+<body>
+<div class="page-wrapper"> <!-- контейнер с элементами -->
+    <header class="page-header"> <!-- заголовок (верхняя часть страницы) -->
+        <div>
+            <h1>Красноштанова Юлия Николаевна</h1> <!-- заг 1 ур -->
+            <h3>Группа P3216</h3> <!-- заг 3 ур -->
+            <h3>Вариант 466344</h3> <!-- заг 3 ур -->
+        </div>
+    </header>
+
+    <main> <!-- основная часть сайта -->
+        <div class="top-row"> <!-- икс, игрек, р, график, кнопка -->
+            <form id="form"> <!-- форма для параметров x y R -->
+                <fieldset id="paramX"> <!-- элементы парама x в рамочке-->
+                    <legend>Выберите X:</legend>
+                    <label><input type="checkbox" id="x-4" name="checkX" value="-4"> -4</label>
+                    <label><input type="checkbox" id="x-3" name="checkX" value="-3"> -3</label>
+                    <label><input type="checkbox" id="x-2" name="checkX" value="-2"> -2</label>
+                    <label><input type="checkbox" id="x-1" name="checkX" value="-1"> -1</label>
+                    <label><input type="checkbox" id="x0"  name="checkX" value="0"> 0</label>
+                    <label><input type="checkbox" id="x1"  name="checkX" value="1"> 1</label>
+                    <label><input type="checkbox" id="x2"  name="checkX" value="2"> 2</label>
+                    <label><input type="checkbox" id="x3"  name="checkX" value="3"> 3</label>
+                    <label><input type="checkbox" id="x4"  name="checkX" value="4"> 4</label>
+                </fieldset>
+
+                <label for="y">Введите Y:</label> <!-- ввод парама y -->
+                <input type="text" id="y" name="checkY" required inputmode="decimal" placeholder="вещественное число [-5...5]" pattern="^-?\d+(?:[.,]\d+)?$">
+
+                <fieldset id="paramR"> <!-- элементы парама R в рамочке-->
+                    <legend>Выберите R:</legend>
+                    <label><input type="checkbox" id="r1"   name="checkR" value="1.0"> 1.0</label>
+                    <label><input type="checkbox" id="r1_5" name="checkR" value="1.5"> 1.5</label>
+                    <label><input type="checkbox" id="r2"   name="checkR" value="2.0"> 2.0</label>
+                    <label><input type="checkbox" id="r2_5" name="checkR" value="2.5"> 2.5</label>
+                    <label><input type="checkbox" id="r3"   name="checkR" value="3.0"> 3.0</label>
+                </fieldset>
+
+                <button id="submit">Отправить</button> <!-- кнопка отправки парамов -->
+                <p id="formError" style="color:#d63031; margin:4px 0 0; font-size:13px;"></p>
+            </form> <!-- конец формы парамов X Y R-->
+
+            <div class="canvas-wrapper"> <!-- график -->
+                <canvas id="canvas" width="520" height="520"></canvas>
+            </div>
+        </div> <!-- конец контейнера с X Y R-->
+
+        <section> <!-- таблица рез-ов -->
+            <h2>История</h2>
+            <table id="results">
+                <thead> <!-- контейнер для thдов (заголовок таблицы) -->
+                <tr> <!-- table row - строки таблицы (единственная строка в заголовке таблицы - в ней подписи столбцов) -->
+                    <th>№</th> <!-- table header - заголовки таблицы -->
+                    <th>Время (сервер)</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>R</th>
+                    <th>Попадание</th>
+                    <th>Время скрипта, мс</th>
+                </tr>
+                </thead>
+                <tbody id="rows"></tbody> <!-- table body - контейнер для наполнения строк - значений парамов (обрабатывается в js) -->
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+</html>
